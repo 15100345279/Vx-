@@ -1,0 +1,29 @@
+name: Daily Weather Push
+
+on:
+  schedule:
+    # 这是定时任务，每天北京时间 8:00 运行（UTC时间 0:00）
+    # 注意：GitHub Actions 的定时任务可能有延迟[reference:23]
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 允许你手动触发，方便测试
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: Install dependencies
+      run: pip install requests
+    - name: Run script
+      env:
+        APP_ID: ${{ secrets.APP_ID }}
+        APP_SECRET: ${{ secrets.APP_SECRET }}
+        OPEN_ID: ${{ secrets.OPEN_ID }}
+        TEMPLATE_ID: ${{ secrets.TEMPLATE_ID }}
+        QWEATHER_KEY: ${{ secrets.QWEATHER_KEY }}
+      run: python wechat_weather.py
