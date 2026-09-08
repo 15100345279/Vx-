@@ -1,6 +1,16 @@
 import requests
 import json
 import datetime
+import os
+
+# --- 从环境变量读取配置 ---
+APP_ID = os.environ.get("APP_ID")
+APP_SECRET = os.environ.get("APP_SECRET")
+OPEN_ID = os.environ.get("OPEN_ID")
+TEMPLATE_ID = os.environ.get("TEMPLATE_ID")
+QWEATHER_API_KEY = os.environ.get("QWEATHER_KEY")
+# 城市：如果环境变量没设置，默认用北京
+CITY = os.environ.get("CITY", "北京")
 
 # --- 1. 配置信息（全部替换成你自己的）---
 APP_ID = "wx0eabf1435f9f1952"
