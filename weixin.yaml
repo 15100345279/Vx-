@@ -27,4 +27,4 @@ jobs:
         TEMPLATE_ID: ${{ secrets.TEMPLATE_ID }}
         QWEATHER_KEY: ${{ secrets.QWEATHER_KEY }}
         CITY: ${{ secrets.CITY }}
-      run: python wechat_weather.py
+      run: python weixin.py
