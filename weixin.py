@@ -8,6 +8,9 @@ APP_SECRET = os.environ.get("APP_SECRET")
 TEMPLATE_ID = os.environ.get("TEMPLATE_ID")
 QWEATHER_API_KEY = os.environ.get("QWEATHER_KEY")
 
+USERS_RAW = os.environ.get("USERS")
+print(f"原始 USERS 值: {USERS_RAW}")
+
 # USERS 是一个 JSON 数组，格式：[{"name":"张三","openid":"oAa...","city":"北京"}, ...]
 USERS_JSON = os.environ.get("USERS", "[]")
 try:
@@ -45,7 +48,7 @@ def get_access_token():
 # ==================== 2. 获取单个城市的天气（和风天气） ====================
 def get_weather(city):
     # 使用正式版 API（不要用 devapi）
-    url = "https://api.qweather.com/v7/weather/now"
+    url = "https://devapi.qweather.com/v7/weather/now"
     params = {
         "location": city,
         "key": QWEATHER_API_KEY
