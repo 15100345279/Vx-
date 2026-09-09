@@ -8,11 +8,8 @@ APP_SECRET = os.environ.get("APP_SECRET")
 TEMPLATE_ID = os.environ.get("TEMPLATE_ID")
 QWEATHER_API_KEY = os.environ.get("QWEATHER_KEY")
 
-USERS_RAW = os.environ.get("USERS")
-print(f"原始 USERS 值: {USERS_RAW}")
-
 # USERS 是一个 JSON 数组，格式：[{"name":"张三","openid":"oAa...","city":"北京"}, ...]
-USERS_JSON = os.environ.get("USERS", "[]")
+USERS_JSON = '[{"name":"自己","openid":"oAa6628IU8QnT7zqoROPHWWMs1Jc","city":"北京"}]'
 try:
     USERS = json.loads(USERS_JSON)
 except Exception as e:
