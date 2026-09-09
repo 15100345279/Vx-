@@ -8,12 +8,17 @@ APP_SECRET = os.environ.get("APP_SECRET")
 TEMPLATE_ID = os.environ.get("TEMPLATE_ID")
 QWEATHER_API_KEY = os.environ.get("QWEATHER_KEY")
 
-# USERS 是一个 JSON 数组，格式：[{"name":"张三","openid":"oAa...","city":"北京"}, ...]
-USERS_JSON = '[{"name":"自己","openid":"oAa6628IU8QnT7zqoROPHWWMs1Jc","city":"beijing"}]'
+# ==================== 硬编码用户列表（两个用户） ====================
+USERS_JSON = '''
+[
+  {"name":"自己","openid":"oAa6628IU8QnT7zqoROPHWWMs1Jc","city":"beijing"},
+  {"name":"娅娅","openid":"oAa662w6WZASAkqxSFIHsR9VlxHA","city":"tianjin"}
+]
+'''
 try:
     USERS = json.loads(USERS_JSON)
 except Exception as e:
-    print(f"❌ USERS 环境变量 JSON 解析失败: {e}")
+    print(f"❌ USERS JSON 解析失败: {e}")
     USERS = []
 
 print("=" * 50)
@@ -42,9 +47,8 @@ def get_access_token():
         print(f"[微信] ❌ access_token 请求异常: {e}")
         return None
 
-# ==================== 2. 获取单个城市的天气（和风天气） ====================
+# ==================== 2. 获取单个城市的天气（wttr.in） ====================
 def get_weather(city):
-    # 使用 wttr.in 免费天气（无需 Key）
     url = f"https://wttr.in/{city}?format=j1"
     print(f"[天气] 请求 URL: {url}")
     try:
@@ -79,7 +83,7 @@ def send_to_user(open_id, weather_data, user_name="用户"):
             "city": {"value": weather_data['city']},
             "weather": {"value": weather_data['weather']},
             "temp": {"value": f"{weather_data['temp']}℃"},
-            "uv_index": {"value": "中等"},      # 如需真实紫外线，可额外调用指数接口
+            "uv_index": {"value": "中等"},
             "tips": {"value": "今天天气不错，注意防晒！"}
         }
     }
