@@ -9,7 +9,7 @@ TEMPLATE_ID = os.environ.get("TEMPLATE_ID")
 QWEATHER_API_KEY = os.environ.get("QWEATHER_KEY")
 
 # USERS 是一个 JSON 数组，格式：[{"name":"张三","openid":"oAa...","city":"北京"}, ...]
-USERS_JSON = '[{"name":"自己","openid":"oAa6628IU8QnT7zqoROPHWWMs1Jc","city":"北京"}]'
+USERS_JSON = '[{"name":"自己","openid":"oAa6628IU8QnT7zqoROPHWWMs1Jc","city":"beijing"}]'
 try:
     USERS = json.loads(USERS_JSON)
 except Exception as e:
@@ -44,27 +44,18 @@ def get_access_token():
 
 # ==================== 2. 获取单个城市的天气（和风天气） ====================
 def get_weather(city):
-    # 使用正式版 API（不要用 devapi）
-    url = "https://devapi.qweather.com/v7/weather/now"
-    params = {
-        "location": city,
-        "key": QWEATHER_API_KEY
-    }
+    # 使用 wttr.in 免费天气（无需 Key）
+    url = f"https://wttr.in/{city}?format=j1"
+    print(f"[天气] 请求 URL: {url}")
     try:
-        resp = requests.get(url, params=params, timeout=10)
+        resp = requests.get(url, timeout=10)
         data = resp.json()
-        code = data.get('code')
-        print(f"[天气] {city} 返回码: {code}")
-        if code == '200':
-            now = data['now']
-            return {
-                "city": city,
-                "weather": now.get('text', '未知'),
-                "temp": now.get('temp', '--')
-            }
-        else:
-            print(f"[天气] ❌ {city} 获取失败: {data}")
-            return None
+        current = data.get('current_condition', [{}])[0]
+        return {
+            "city": city,
+            "weather": current.get('weatherDesc', [{}])[0].get('value', '未知'),
+            "temp": current.get('temp_C', '--')
+        }
     except Exception as e:
         print(f"[天气] ❌ {city} 请求异常: {e}")
         return None
